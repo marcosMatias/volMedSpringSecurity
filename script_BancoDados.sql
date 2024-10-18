@@ -1,12 +1,19 @@
 /*  
+
+ drop view XXMCC.usuarios#
  drop view XXMCC.MEDICOS#;
  DROP VIEW XXMCC.CONSULTAS#;
+ drop sequence XXMCC.usuarios_s;
  drop sequence XXMCC.medicos_s;
  drop sequence XXMCC.consultas_s;
+ drop table xxmcc.usuarios;
  drop table xxmcc.consultas;
  drop table xxmcc.medicos;
 
 */
+--------------------------------------------------------------------------------
+
+-- Script de criação de tabelas - Banco de dados Oracle 
 
 --------------------------------------------------------------------------------
 CREATE TABLE xxmcc.medicos(
@@ -156,3 +163,10 @@ GRANT SELECT ON XXMCC.usuarios_s  TO APPS;
 CREATE OR REPLACE SYNONYM medicos_s   FOR XXMCC.medicos_s ;
 CREATE OR REPLACE SYNONYM consultas_s FOR XXMCC.consultas_s ;
 CREATE OR REPLACE SYNONYM usuarios_s  FOR XXMCC.usuarios_s;
+
+---------------------------------------------------------------------------------
+
+-- para criptografar as senhas :  https://www.javainuse.com/onlineBcrypt
+ INSERT INTO usuarios(nome, email, senha) VALUES ('Joao', 'joao@email.com', '$2y$10$GE/i8ZvFAPuRU8Av7Bq4sO3/PbSYWon2MG2oscE2B7nxPwCEGI2yu');  --joao123
+ INSERT INTO usuarios(nome, email, senha) VALUES ('Maria', 'maria@email.com', '$2a$10$vfOb6emgnXWMPoELDfj7fOwXpGFl3fpLHe9gGT2Hqj7SsgZ4lD/C.'); --maria123
+ 
