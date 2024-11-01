@@ -5,11 +5,14 @@ import med.voll.web_application.domain.RegraDeNegocioException;
 import med.voll.web_application.domain.consulta.ConsultaService;
 import med.voll.web_application.domain.consulta.DadosAgendamentoConsulta;
 import med.voll.web_application.domain.medico.Especialidade;
+import med.voll.web_application.domain.usuario.Usuario;
 
 import java.math.BigDecimal;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,14 +37,15 @@ public class ConsultaController {
         return Especialidade.values();
     }
 
-    @GetMapping
-    public String carregarPaginaListagem(@PageableDefault Pageable paginacao, Model model) {
-        var consultasAtivas = service.listar(paginacao);
+    @GetMapping   
+    public String carregarPaginaListagem(@PageableDefault Pageable paginacao, Model model, @AuthenticationPrincipal Usuario logado) {
+        var consultasAtivas = service.listar(paginacao,logado);
         model.addAttribute("consultas", consultasAtivas);
         return PAGINA_LISTAGEM;
     }
 
     @GetMapping("formulario")
+    @PreAuthorize("hasRole('ATENDENTE') OR hasRole('PACIENTE')")
     public String carregarPaginaAgendaConsulta(BigDecimal id, Model model) {
         if (id != null) {
             model.addAttribute("dados", service.carregarPorId(id));
@@ -53,6 +57,7 @@ public class ConsultaController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ATENDENTE') OR hasRole('PACIENTE')")
     public String cadastrar(@Valid @ModelAttribute("dados") DadosAgendamentoConsulta dados, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("dados", dados);
@@ -69,7 +74,7 @@ public class ConsultaController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping   
     public String excluir(BigDecimal id) {
         service.excluir(id);
         return REDIRECT_LISTAGEM;

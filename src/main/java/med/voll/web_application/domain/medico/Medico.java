@@ -9,8 +9,8 @@ import jakarta.persistence.*;
 public class Medico {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEDICOS_S")
-    @SequenceGenerator(sequenceName = "MEDICOS_S", allocationSize = 1, name = "MEDICOS_S")
+    /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEDICOS_S")
+    @SequenceGenerator(sequenceName = "MEDICOS_S", allocationSize = 1, name = "MEDICOS_S")*/ //comentado para não utilizar a sequence
     private BigDecimal id;
     private String nome;
     private String email;
@@ -22,7 +22,8 @@ public class Medico {
     @Deprecated
     public Medico(){}
 
-    public Medico(DadosCadastroMedico dados) {
+    public Medico(BigDecimal id,DadosCadastroMedico dados) {
+    	this.id = id;
         atualizarDados(dados);
     }
 

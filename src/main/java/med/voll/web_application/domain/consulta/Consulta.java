@@ -2,6 +2,7 @@ package med.voll.web_application.domain.consulta;
 
 import jakarta.persistence.*;
 import med.voll.web_application.domain.medico.Medico;
+import med.voll.web_application.domain.paciente.Paciente;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,7 +15,9 @@ public class Consulta {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CONSULTAS_S")
     @SequenceGenerator(sequenceName = "CONSULTAS_S", allocationSize = 1, name = "CONSULTAS_S")
     private BigDecimal id;
-    private String paciente;
+    @ManyToOne
+    @JoinColumn(name = "paciente_id")
+    private Paciente paciente;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Medico medico;
@@ -24,13 +27,13 @@ public class Consulta {
     @Deprecated
     public Consulta(){}
 
-    public Consulta(Medico medico, DadosAgendamentoConsulta dados) {
-        modificarDados(medico, dados);
+    public Consulta(Medico medico, Paciente paciente, DadosAgendamentoConsulta dados) {
+        modificarDados(medico, paciente, dados);
     }
-
-    public void modificarDados(Medico medico, DadosAgendamentoConsulta dados) {
+    
+    public void modificarDados(Medico medico, Paciente paciente, DadosAgendamentoConsulta dados) {
         this.medico = medico;
-        this.paciente = dados.paciente();
+        this.paciente = paciente;
         this.data = dados.data();
     }
 
@@ -42,13 +45,9 @@ public class Consulta {
 		this.id = id;
 	}
 
-	public String getPaciente() {
-		return paciente;
-	}
-
-	public void setPaciente(String paciente) {
-		this.paciente = paciente;
-	}
+	public Paciente getPaciente() {
+        return paciente;
+    }
 
 	public Medico getMedico() {
 		return medico;

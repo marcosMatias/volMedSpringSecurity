@@ -8,5 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UsuarioRepository extends JpaRepository<Usuario, BigDecimal> {
 	
 	Optional<Usuario> findByEmailIgnoreCase(String email);
-
+  
+	
+	Optional<Usuario> findByTokenIgnoreCase(String Token);
 }
